@@ -1,0 +1,23 @@
+{
+  "name": "Tiny Hal",
+  "version": "0.1.0",
+  "description": "Tiny platform / hardware abstraction layer",
+  "keywords": "hal arduino microcontroller",
+  "authors":
+  {
+    "name":  "Alexey Dynda",
+    "url":   "https://github.com/lexus2k",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/lexus2k/tinyhal"
+  },
+  "homepage": "https://github.com/lexus2k/tinyhal",
+  "export": {
+    "exclude": [ "docs/*", "unittest/*", "tools/*" ]
+  },
+  "frameworks": [ "arduino" ],
+  "platforms": "*"
+}

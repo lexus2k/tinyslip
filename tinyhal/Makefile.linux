@@ -1,0 +1,18 @@
+.PHONY:
+
+# ************* Common defines ********************
+CPPFLAGS += -I./tools/serial
+CPPFLAGS += -fPIC -pthread -pg -fexceptions
+CFLAGS += -g
+LDFLAGS += -L. -lm -shared
+
+include Makefile.common
+include Makefile.cpputest
+
+cppcheck:
+	@cppcheck --force \
+	    --enable=warning,style,performance,portability \
+	    --suppress=information \
+	    -q -I ./src \
+	    --error-exitcode=1 src
+	@echo "[DONE]"
