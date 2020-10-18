@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map For TinyProto
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin		KEYWORD2
+toSerial	KEYWORD2
+disableCrc	KEYWORD2
+enableCrc16	KEYWORD2
+enableCrc32	KEYWORD2
+enableCheckSum	KEYWORD2
+getWord		KEYWORD2
+getByte		KEYWORD2
+getChar		KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

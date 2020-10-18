@@ -1,0 +1,56 @@
+/**
+ @file
+ @brief Introduction page
+
+ \mainpage introduction Introduction
+           Welcome to the documentation of Tiny HAL Library.
+           Any help/suggestions are more than welcome.
+
+ \section  tinyhal_about What is Tiny HAL library?
+           Tinyhal is platform / hardware abstraction layer library that implements synchronization objects, time count functions, some hardware related API
+           for different platforms in C-style API, making available to write platform independent code. It is intended to be used for the systems with low resources.
+           It is also can be compiled for desktop Linux system, and it can be built it for Windows.
+
+ \section  tinyhal_features Key Features
+           Key features:
+            * Serial port support (Windows & Linux)
+            * Mutex support
+            * Event Groups support
+            * Time tick functions
+
+ \section  tinyhal_platforms Supported platforms
+           * Any platform, where C/C++ compiler is available (C99, C++11)
+           * If platform is not supported, the library will use default implementation (no_platform)
+           * You're free to add support for new platform via Pull Request
+
+ \section  tinyhal_license License
+           Tiny HAL library is available under LGPLv3 license.
+
+*/
+
+// Groups definition
+
+/*!
+       \defgroup ERROR_CODES Error codes for Tiny API functions
+       Error codes for Tiny API functions
+*/
+
+/*!
+       \defgroup MUTEX Mutex API
+       Mutex API
+*/
+
+/*!
+       \defgroup EVENTS Event groups API
+       Event groups API
+*/
+
+/*!
+       \defgroup TIME Time-specific API
+       Time-specific API
+*/
+
+/*!
+       \defgroup SERIAL Serial port API
+       Serial port API
+*/
