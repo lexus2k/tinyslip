@@ -1,0 +1,24 @@
+{
+  "name": "Tiny SLIP Library",
+  "version": "0.1.0",
+  "description": "Tiny SLIP Library is very simple protocol for Serial communication. It is intended to be used for the systems with small amount of resources",
+  "keywords": "protocol communication protocol-library arduino microcontroller",
+  "authors":
+  {
+    "name":  "Alexey Dynda",
+    "url":   "https://github.com/lexus2k",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/lexus2k/tinyslip"
+  },
+  "homepage": "https://github.com/lexus2k/tinyslip",
+  "export": {
+    "exclude": [ "docs/*", "unittest/*", "tools/*" ]
+  },
+  "frameworks": [ "arduino" ],
+  "platforms": "*",
+  "examples": "examples/*/*.ino"
+}

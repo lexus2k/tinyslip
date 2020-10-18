@@ -1,0 +1,14 @@
+CC=avr-gcc
+CXX=avr-gcc
+
+MCU ?= atmega328p
+FREQ ?= 16000000
+CONFIG_ENABLE_FCS32 ?= n
+CONFIG_ENABLE_FCS16 ?= n
+CONFIG_ENABLE_CHECKSUM ?= y
+CONFIG_ENABLE_STATS ?= n
+
+CPPFLAGS += -mmcu=$(MCU) -DF_CPU=$(FREQ) -fno-exceptions
+
+include Makefile.common
+
