@@ -18,8 +18,8 @@
 */
 
 #include "hal/tiny_serial.h"
-#include "proto/half_duplex/tiny_hd.h"
-#include "TinySlipProtocol.h"
+#include "proto/slip/tiny_slip.h"
+#include "TinyProtocolSlip.h"
 #include <stdio.h>
 #include <time.h>
 #include <chrono>
@@ -35,24 +35,6 @@ static bool s_isArduinoBoard = false;
 
 static int s_receivedBytes = 0;
 static int s_sentBytes = 0;
-
-static int serial_send(void *p, const void *buf, int len)
-{
-#ifdef __linux__
-    return tiny_serial_send(reinterpret_cast<intptr_t>(p), buf, len);
-#else
-    return tiny_serial_send(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
-#endif
-}
-
-static int serial_receive(void *p, void *buf, int len)
-{
-#ifdef __linux__
-    return tiny_serial_read(reinterpret_cast<intptr_t>(p), buf, len);
-#else
-    return tiny_serial_read(reinterpret_cast<tiny_serial_handle_t>(p), buf, len);
-#endif
-}
 
 static void print_help()
 {
@@ -118,9 +100,9 @@ static int parse_args(int argc, char *argv[])
 
 //================================== SLIP ======================================
 
-Tiny::SLIP *s_protoSlip = nullptr;
+SLIP::SLIP *s_protoSlip = nullptr;
 
-void onReceiveFrameSlip(Tiny::IPacket &pkt)
+void onReceiveFrameSlip(SLIP::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, "<<< Frame received payload len=%d\n", (int)pkt.size() );
@@ -134,7 +116,7 @@ void onReceiveFrameSlip(Tiny::IPacket &pkt)
     }
 }
 
-void onSendFrameSlip(Tiny::IPacket &pkt)
+void onSendFrameSlip(SLIP::IPacket &pkt)
 {
     if ( !s_runTest )
         fprintf(stderr, ">>> Frame sent payload len=%d\n", (int)pkt.size() );
@@ -144,7 +126,7 @@ void onSendFrameSlip(Tiny::IPacket &pkt)
 static int run_slip(tiny_serial_handle_t port)
 {
     uint8_t *buffer = static_cast<uint8_t *>(malloc( tiny_slip_calc_buffer_size( s_packetSize ) ));
-    Tiny::SLIP proto( buffer, tiny_slip_calc_buffer_size( s_packetSize ) );
+    SLIP::SLIP proto( buffer, tiny_slip_calc_buffer_size( s_packetSize ) );
     // Set send timeout to 1000ms as we are going to use multithread mode
     // With generator mode it is ok to send with timeout from run_fd() function
     // But in loopback mode (!generator), we must resend frames from receiveCallback as soon as possible, use no timeout then
@@ -154,14 +136,14 @@ static int run_slip(tiny_serial_handle_t port)
     s_protoSlip = &proto;
 
     proto.begin();
-    std::thread rxThread( [](tiny_serial_handle_t port, Tiny::SLIP &proto)->void {
+    std::thread rxThread( [](tiny_serial_handle_t port, SLIP::SLIP &proto)->void {
         while (!s_terminate) {
             uint8_t byte;
             if ( tiny_serial_read(port, &byte, 1) == 1)
                 proto.run_rx(&byte, 1);
         }
     }, port, std::ref(proto) );
-    std::thread txThread( [](tiny_serial_handle_t port, Tiny::SLIP &proto)->void {
+    std::thread txThread( [](tiny_serial_handle_t port, SLIP::SLIP &proto)->void {
         while (!s_terminate) {
             uint8_t byte;
             if ( proto.run_tx(&byte, 1) == 1)
@@ -177,7 +159,7 @@ static int run_slip(tiny_serial_handle_t port)
     {
         if (s_generatorEnabled)
         {
-            Tiny::PacketD packet(s_packetSize);
+            SLIP::PacketD packet(s_packetSize);
             packet.put("Generated frame. test in progress");
             if ( proto.write( packet.data(), packet.size() ) < 0 )
             {

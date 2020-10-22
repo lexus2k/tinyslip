@@ -1,17 +1,16 @@
 default: all
-DESTDIR ?= .
-BLD ?= bld
 LOG_LEVEL ?=
+PKG_CONFIG ?= pkg-config
 ifeq ($(ENABLE_LOGS),y)
     ENABLE_SLIP_LOGS ?= y
 endif
 
-VERSION=0.8.0
+VERSION=0.1.0
 
 CPPFLAGS += -I./src
 
 CFLAGS += -std=gnu99
-CPPFLAGS += -Os -Wall -Werror -ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
+CPPFLAGS += -Os -Wall -Werror -ffunction-sections -fdata-sections
 CXXFLAGS += -std=c++11
 
 ifneq ($(LOG_LEVEL),)
@@ -26,6 +25,8 @@ ifeq ($(ENABLE_DEBUG),y)
     CPPFLAGS += -DTINY_DEBUG=1
 endif
 
+###################################################################
+
 .PHONY: prep clean library all install docs release
 
 ####################### Compiling library #########################
@@ -34,9 +35,6 @@ TARGET_LIB ?= libtinyslip.a
 
 OBJ_LIB += \
         src/proto/slip/tiny_slip.o \
-        src/hal/tiny_list.o \
-        src/hal/tiny_types.o \
-        src/hal/tiny_serial.o \
         src/TinyProtocolSlip.o \
 
 prep:
@@ -45,6 +43,9 @@ ifdef CONFIG_FOR_WINDOWS_BUILD
 else
 	mkdir -p $(BLD)
 endif
+
+LDFLAGS += $(shell $(PKG_CONFIG) --libs tinyhal)
+CPPFLAGS += $(shell $(PKG_CONFIG) --cflags tinyhal)
 
 library: prep $(OBJ_LIB)
 	$(AR) rcs $(BLD)/$(TARGET_LIB) $(OBJ_LIB)

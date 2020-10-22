@@ -59,7 +59,7 @@ static void tiny_slip_reset( tiny_slip_handle_t handle )
     handle->rx.state = tiny_slip_read_start;
     handle->tx.data = NULL;
     handle->tx.state = tiny_slip_send_start;
-    tiny_events_clear( &handle->events, EVENT_BIS_ALL );
+    tiny_events_clear( &handle->events, EVENT_BITS_ALL );
     tiny_events_set( &handle->events, TX_ACCEPT_BIT );
 }
 

@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/lexus2k/tinyslip",
   "export": {
-    "exclude": [ "docs/*", "unittest/*", "tools/*" ]
+    "exclude": [ "doc/*", "unittest/*", "tools/*", "bs/*" ]
   },
   "frameworks": [ "arduino" ],
   "platforms": "*",

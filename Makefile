@@ -1,3 +1,22 @@
 ARCH ?= linux
+DESTDIR ?= .
 
-include Makefile.$(ARCH)
+include bs/toolchain.mk
+include bs/package_make.mk
+
+###################### Added HAL library #########################
+
+PKG = tinyhal
+$(PKG)_SRCDIR = ./tinyhal
+$(eval $(package-make))
+
+####################### Compiling library #########################
+
+PKG = tinyslip
+$(PKG)_SRCDIR = .
+$(PKG)_DEPENDENCIES = tinyhal
+$(PKG)_MAKE_OPTS = -f Makefile.$(ARCH)
+$(PKG)_CLEAN_OPTS = -f Makefile.$(ARCH) clean
+$(eval $(package-make))
+
+default: tinyslip
