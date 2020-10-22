@@ -17,8 +17,6 @@
     along with Tiny HAL Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "hal/tiny_serial.h"
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>

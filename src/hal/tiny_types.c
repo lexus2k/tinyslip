@@ -1,5 +1,5 @@
 /*
-    Copyright 2016-2019 (C) Alexey Dynda
+    Copyright 2016-2020 (C) Alexey Dynda
 
     This file is part of Tiny Tiny HAL Library.
 
@@ -18,6 +18,7 @@
 */
 
 #include "tiny_types.h"
+#include "tiny_debug.h"
 
 #if defined(__AVR__)
 #include "impl/avr_hal.inl"
@@ -35,8 +36,6 @@
 #warning "Platform not supported. Multithread support is disabled"
 #include "impl/no_platform_hal.inl"
 #endif
-
-#include "tiny_debug.h"
 
 uint8_t g_tiny_log_level = TINY_LOG_LEVEL_DEFAULT;
 
