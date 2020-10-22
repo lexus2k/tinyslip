@@ -17,6 +17,8 @@
     along with Tiny HAL Library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "tiny_serial.h"
+
 #if defined(__linux__)
 
 #include "serial/linux_serial.inl"

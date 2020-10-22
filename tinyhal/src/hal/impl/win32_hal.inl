@@ -1,7 +1,7 @@
 /*
-    Copyright 2019 (C) Alexey Dynda
+    Copyright 2019-2020 (C) Alexey Dynda
 
-    This file is part of Tiny Tiny HAL Library.
+    This file is part of Tiny HAL Library.
 
     Tiny HAL Library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,10 +17,6 @@
     along with Tiny HAL Library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hal/tiny_types.h"
-
-//#include <pthread.h>
-//#include <unistd.h>
 #include <stdint.h>
 #include <errno.h>
 

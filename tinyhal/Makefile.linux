@@ -1,7 +1,6 @@
 .PHONY:
 
 # ************* Common defines ********************
-CPPFLAGS += -I./tools/serial
 CPPFLAGS += -fPIC -pthread -pg -fexceptions
 CFLAGS += -g
 LDFLAGS += -L. -lm -shared

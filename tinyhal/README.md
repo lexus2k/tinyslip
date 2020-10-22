@@ -1,7 +1,7 @@
 ![TinyHal](.travis/tinylogo.svg)<br>
 [![Build Status](https://travis-ci.com/lexus2k/tinyhal.svg?branch=main)](https://travis-ci.com/lexus2k/tinyhal)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyhal/badge.svg?branch=main)](https://coveralls.io/github/lexus2k/tinyhal?branch=main)
-[![Doc Status](.travis/code_documented.svg)](https://codedocs.xyz/lexus2k/tinyhal)
+[![Documentation](https://codedocs.xyz/lexus2k/tinyhal.svg)](https://codedocs.xyz/lexus2k/tinyhal/)
 
 [tocstart]: # (toc start)
 
