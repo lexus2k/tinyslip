@@ -1,0 +1,12 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: tinyhal
+Description: Tiny HAL Library
+Version: 0.1.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ltinyhal
+Requires:
+

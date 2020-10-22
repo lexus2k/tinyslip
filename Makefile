@@ -1,3 +1,4 @@
+default: tinyslip
 ARCH ?= linux
 DESTDIR ?= .
 
@@ -17,6 +18,6 @@ $(PKG)_SRCDIR = .
 $(PKG)_DEPENDENCIES = tinyhal
 $(PKG)_MAKE_OPTS = -f Makefile.$(ARCH)
 $(PKG)_CLEAN_OPTS = -f Makefile.$(ARCH) clean
+$(PKG)_INSTALL_OPTS = -f Makefile.$(ARCH) install DESTDIR=$(DESTDIR)
 $(eval $(package-make))
 
-default: tinyslip

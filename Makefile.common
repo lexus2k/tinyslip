@@ -1,4 +1,5 @@
 default: all
+BLD ?= bld
 LOG_LEVEL ?=
 PKG_CONFIG ?= pkg-config
 ifeq ($(ENABLE_LOGS),y)
@@ -27,7 +28,7 @@ endif
 
 ###################################################################
 
-.PHONY: prep clean library all install docs release
+.PHONY: clean library all install docs release
 
 ####################### Compiling library #########################
 
@@ -37,29 +38,17 @@ OBJ_LIB += \
         src/proto/slip/tiny_slip.o \
         src/TinyProtocolSlip.o \
 
-prep:
-ifdef CONFIG_FOR_WINDOWS_BUILD
-	if not exist $(BLD) mkdir $(BLD)
-else
-	mkdir -p $(BLD)
-endif
-
 LDFLAGS += $(shell $(PKG_CONFIG) --libs tinyhal)
 CPPFLAGS += $(shell $(PKG_CONFIG) --cflags tinyhal)
 
-library: prep $(OBJ_LIB)
+library: $(OBJ_LIB)
+	mkdir -p $(BLD)
 	$(AR) rcs $(BLD)/$(TARGET_LIB) $(OBJ_LIB)
 
 install:
-ifdef CONFIG_FOR_WINDOWS_BUILD
-	if not exist $(DESTDIR)\include mkdir $(DESTDIR)\include &\
-	xcopy src $(DESTDIR)\include /y /s &\
-	for /R $(DESTDIR)\include %%G in (*) do ( if not %%~xG==.h del /F/Q/S %%G )
-else
 	mkdir -p $(DESTDIR)/include $(DESTDIR)/lib
 	cp -r $(BLD)/$(TARGET_LIB) $(DESTDIR)/lib/
 	DST=`realpath $(DESTDIR)` && cd src && find ./ -name \*.h -exec cp --parents {} $${DST}/include/ \; && cd ..
-endif
 
 docs:
 	doxygen doxygen.cfg
@@ -67,11 +56,6 @@ docs:
 all: library
 
 clean:
-ifdef CONFIG_FOR_WINDOWS_BUILD
-	if exist $(BLD) rd $(BLD) /q /s &\
-	for /R .\src\ %%G in (*.o) do ( del /F/Q/S %%G )
-else
 	rm -rf $(BLD)
 	rm -rf $(OBJ_LIB) $(OBJ_LIB:.o=.gcno) $(OBJ_LIB:.o=.gcda)
 	rm -rf gmon.out
-endif
