@@ -27,6 +27,7 @@ define inner-project-binary
 .PHONY: $(1)_clean $(1)
 
 $(1)_DEPENDENCIES ?=
+$(1)_NAME ?= $(1)
 $(1)_SOURCES ?=
 $(1)_MAKE_ENV ?=
 $(1)_LIBRARIES ?=
@@ -45,21 +46,21 @@ endif
 
 ifndef $(1)_BUILD_CMDS
 define $(1)_BUILD_CMDS
-	$$(CROSS_ENV) $$($(1)_MAKE_ENV) $$(CXX) $(CPPFLAGS) -o $(1) $$($(1)_OBJS) $$(LDFLAGS)
+	$$(CROSS_ENV) $$($(1)_MAKE_ENV) $$(CXX) $(CPPFLAGS) -o $$($(1)_NAME) $$($(1)_OBJS) $$(LDFLAGS)
 endef
 endif
 
 ifndef $(1)_INSTALL_CMDS
 define $(1)_INSTALL_CMDS
 	@mkdir -p $(DESTDIR)/usr/bin && \
-	cp -f $(1) $(DESTDIR)/usr/bin/
+	cp -f $$($(1)_NAME) $(DESTDIR)/usr/bin/
 endef
 endif
 
 ifndef $(1)_CLEAN_CMDS
 define $(1)_CLEAN_CMDS
 	rm -rf $$($(1)_OBJS) $$($(1)_OBJS:.o=.gcno) $$($(1)_OBJS:.o=.gcda) && \
-	rm -rf gmon.out $(1) $(1).a && \
+	rm -rf gmon.out $$($(1)_NAME) && \
 	rm -rf .ts_$(1)_*
 endef
 endif
@@ -70,10 +71,6 @@ endif
 
 $$($(1)_OBJS): .ts_$(1)_deps
 
-#.ts_$(1)_build: LDFLAGS = $(LDFLAGS) $$($(1)_LDFLAGS)
-#.ts_$(1)_build: CPPFLAGS = $(CPPFLAGS) $$($(1)_CPPFLAGS)
-#.ts_$(1)_build: CFLAGS = $(CFLAGS) $$($(1)_CFLAGS)
-#.ts_$(1)_build: CXXFLAGS = $(CXXFLAGS) $$($(1)_CXXFLAGS)
 .ts_$(1)_build: LDFLAGS += $$($(1)_LDFLAGS)
 .ts_$(1)_build: CPPFLAGS += $$($(1)_CPPFLAGS)
 .ts_$(1)_build: CFLAGS += $$($(1)_CFLAGS)
@@ -108,16 +105,18 @@ project-binary = $(call inner-project-binary,$(PKG))
 # $1 library name
 define inner-project-static-lib
 
+$(1)_NAME ?= $(1).a
+
 ifndef $(1)_BUILD_CMDS
 define $(1)_BUILD_CMDS
-	$$(CROSS_ENV) $$($(1)_MAKE_ENV) $$(AR) rcs $(1).a $$($(1)_OBJS)
+	$$(CROSS_ENV) $$($(1)_MAKE_ENV) $$(AR) rcs $$($(1)_NAME) $$($(1)_OBJS)
 endef
 endif
 
 ifndef $(1)_INSTALL_CMDS
 define $(1)_INSTALL_CMDS
 	@mkdir -p $(DESTDIR)/usr/lib/
-	@cp -f $(1).a $(DESTDIR)/usr/lib/
+	@cp -f $$($(1)_NAME) $(DESTDIR)/usr/lib/
 	@mkdir -p $(BLDDIR)/usr/lib/pkgconfig
 	@for i in $$($(1)_PKGCONFIG); do \
 	    cp -f $$$${i} $(BLDDIR)/usr/lib/pkgconfig/; \
@@ -134,4 +133,4 @@ project-static-lib = $(call inner-project-static-lib,$(PKG))
 
 ###################################################################
 
-include platform-$(ARCH).mk
+include bs/platform-$(ARCH).mk

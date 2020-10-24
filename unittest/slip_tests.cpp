@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "helpers/tiny_slip_helper.h"
-#include "helpers/fake_connection.h"
+#include "cpputils/fake_connection.h"
 
 
 TEST_GROUP(SLIP)
