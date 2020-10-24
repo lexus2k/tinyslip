@@ -1,11 +1,44 @@
-default: all
-#default: libtinyslip
+default: libtinyslip
 ARCH ?= linux
 DESTDIR ?= .
 
 include bs/toolchain.mk
 include bs/package_make.mk
 include bs/project.mk
+
+######################## Custom options #########################
+
+ifeq ($(ARCH),linux)
+CONFIG_ENABLE_FCS32 ?= y
+CONFIG_ENABLE_FCS16 ?= y
+CONFIG_ENABLE_CHECKSUM ?= y
+CONFIG_ENABLE_STATS ?=y
+endif
+
+ifeq ($(ARCH),avr)
+CONFIG_ENABLE_FCS32 ?= n
+CONFIG_ENABLE_FCS16 ?= n
+CONFIG_ENABLE_CHECKSUM ?= y
+CONFIG_ENABLE_STATS ?= n
+endif
+
+LOG_LEVEL ?=
+ifeq ($(ENABLE_LOGS),y)
+    ENABLE_SLIP_LOGS ?= y
+endif
+
+ifneq ($(LOG_LEVEL),)
+    CPPFLAGS += -DTINY_LOG_LEVEL_DEFAULT=$(LOG_LEVEL)
+endif
+
+ifeq ($(ENABLE_SLIP_LOGS),y)
+    CPPFLAGS += -DTINY_SLIP_DEBUG=1
+    ENABLE_DEBUG=y
+endif
+
+ifeq ($(ENABLE_DEBUG),y)
+    CPPFLAGS += -DTINY_DEBUG=1
+endif
 
 ###################### Added HAL library #########################
 
@@ -59,7 +92,8 @@ $(PKG)_LDFLAGS = -pthread -lm -L. -ltinyslip -lCppUTest -lCppUTestExt
 $(eval $(project-binary))
 
 .PHONY: check
-check: unit_test
+unit_test: .ts_unittest_build
+check:
 	./unit_test
 endif
 
