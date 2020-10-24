@@ -6,8 +6,6 @@ ifeq ($(ENABLE_LOGS),y)
     ENABLE_SLIP_LOGS ?= y
 endif
 
-VERSION=0.1.0
-
 CPPFLAGS += -I./src
 
 CFLAGS += -std=gnu99
