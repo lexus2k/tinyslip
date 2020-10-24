@@ -59,7 +59,7 @@ endif
 ifndef $(1)_CLEAN_CMDS
 define $(1)_CLEAN_CMDS
 	rm -rf $$($(1)_OBJS) $$($(1)_OBJS:.o=.gcno) $$($(1)_OBJS:.o=.gcda) && \
-	rm -rf gmon.out $(1) blabla && \
+	rm -rf gmon.out $(1) $(1).a && \
 	rm -rf .ts_$(1)_*
 endef
 endif
