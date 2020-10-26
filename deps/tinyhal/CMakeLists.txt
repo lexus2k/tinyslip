@@ -27,6 +27,8 @@ if (NOT DEFINED COMPONENT_DIR)
         string(SUBSTRING ${DIR} ${SLEN} -1 DIR)
         install(FILES ${HFILE} DESTINATION usr/include/${DIR})
     endforeach()
+    install(FILES tinyhal.pc DESTINATION usr/lib/pkgconfig/)
+    install(FILES Findtinyhal.cmake DESTINATION usr/share/cmake/)
 
     if (UNITTEST)
         add_subdirectory(unittest)

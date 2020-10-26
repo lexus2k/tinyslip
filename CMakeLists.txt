@@ -11,7 +11,7 @@ if (NOT DEFINED COMPONENT_DIR)
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake ${CMAKE_CURRENT_LIST_DIR}/bs)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/bs)
 
     include(ExternalProject)
     include(package-linker)
@@ -22,7 +22,7 @@ if (NOT DEFINED COMPONENT_DIR)
 
     add_library(tinyslip STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
-    link_external_package(tinyhal ${CMAKE_CURRENT_LIST_DIR}/tinyhal)
+    link_external_package(tinyhal ${CMAKE_CURRENT_LIST_DIR}/deps/tinyhal)
 
     if (EXAMPLES)
         add_subdirectory(examples/linux/loopback)

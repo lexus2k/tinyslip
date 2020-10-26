@@ -45,9 +45,10 @@ ifdef CONFIG_FOR_WINDOWS_BUILD
 	xcopy src $(DESTDIR)\include /y /s &\
 	for /R $(DESTDIR)\include %%G in (*) do ( if not %%~xG==.h del /F/Q/S %%G )
 else
-	mkdir -p $(DESTDIR)/usr/include $(DESTDIR)/usr/lib
+	mkdir -p $(DESTDIR)/usr/include $(DESTDIR)/usr/lib $(DESTDIR)/usr/lib/pkgconfig
 	cp -r $(BLD)/$(TARGET_LIB) $(DESTDIR)/usr/lib/
 	DST=`realpath $(DESTDIR)` && cd src && find ./ -name \*.h -exec cp --parents {} $${DST}/usr/include/ \; && cd ..
+	cp -f tinyhal.pc $(DESTDIR)/usr/lib/pkgconfig/
 endif
 
 docs:

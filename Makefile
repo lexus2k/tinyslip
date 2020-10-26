@@ -43,8 +43,7 @@ endif
 ###################### Added HAL library #########################
 
 PKG = tinyhal
-$(PKG)_SRCDIR = ./tinyhal
-$(PKG)_PKGCONFIG = tinyhal.pc
+$(PKG)_SRCDIR = ./deps/tinyhal
 $(eval $(package-make))
 
 ##################################################################
