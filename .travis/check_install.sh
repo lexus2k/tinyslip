@@ -7,15 +7,16 @@ if [ "$2" = "" ]; then
     exit 1
 fi
 
-if [ ! -f "$2/lib/libtinyslip.a" ]; then
+if [ ! -f "$2/usr/lib/libtinyslip.a" ]; then
     echo "Library is not copied"
     exit 1
 fi
 
 rootpath=`pwd`
 
-for i in `cd $1/src && find . -name "*.h" && cd $rootpath`; do
-    if [ ! -f "$2/include/$i" ]; then
+# Find all header files, but exclude internal headers
+for i in `cd $1/src && find . -name "*.h" ! -iname "*_int.h" && cd $rootpath`; do
+    if [ ! -f "$2/usr/include/$i" ]; then
         echo "Headers are not copied: $2/include/$i"
         exit 1
     fi

@@ -25,7 +25,7 @@
 
 #include "hal/tiny_serial.h"
 #include "proto/slip/tiny_slip.h"
-#include "TinyProtocol.h"
+#include "TinyProtocolSlip.h"
 #include <stdio.h>
 #include <cstring>
 #include <chrono>
@@ -72,7 +72,7 @@ static int on_frame_sent(void *user_data, const void *data, int len)
     return 0;
 }
 
-static void protocol_tx_thread(tiny_serial_handle_t serial, tinyslip_handle_t handle)
+static void protocol_tx_thread(tiny_serial_handle_t serial, tiny_slip_handle_t handle)
 {
     uint8_t tx[4];
     int tx_len = 0;
@@ -89,14 +89,14 @@ static void protocol_tx_thread(tiny_serial_handle_t serial, tinyslip_handle_t ha
             message = peek_message();
             if ( message )
             {
-                tinyslip_send( handle, message, strlen(message), 0 );
+                tiny_slip_send( handle, message, strlen(message), 0 );
                 peek_next = false;
             }
         }
         if ( !tx_len )
         {
             tx_pos = 0;
-            tx_len = tinyslip_get_tx_data(handle, tx, sizeof(tx));
+            tx_len = tiny_slip_get_tx_data(handle, tx, sizeof(tx));
         }
         if ( tx_len )
         {
@@ -111,7 +111,7 @@ static void protocol_tx_thread(tiny_serial_handle_t serial, tinyslip_handle_t ha
     }
 }
 
-static void protocol_rx_thread(tiny_serial_handle_t serial, tinyslip_handle_t handle)
+static void protocol_rx_thread(tiny_serial_handle_t serial, tiny_slip_handle_t handle)
 {
     uint8_t rx[4];
     int rx_len = 0;
@@ -129,7 +129,7 @@ static void protocol_rx_thread(tiny_serial_handle_t serial, tinyslip_handle_t ha
             rx_len = result;
             rx_pos = 0;
         }
-        int result = tinyslip_run_rx(handle, rx + rx_pos, rx_len, nullptr);
+        int result = tiny_slip_on_rx_data(handle, rx + rx_pos, rx_len, nullptr);
         rx_pos += result;
         rx_len -= result;
     }
@@ -150,16 +150,17 @@ int main(int argc, char *argv[])
     }
 
     // Init slip protocol
-    tinyslip_init_t conf{};
-    conf.send_tx = nullptr;
+    tiny_slip_init_t conf{};
+    tiny_slip_handle_t handle = nullptr;
+
     conf.on_frame_read = on_frame_read;
     conf.on_frame_sent = on_frame_sent;
     conf.rx_buf = malloc( 1024 );
     conf.rx_buf_size = 1024;
-    conf.user_data = nullptr;
     conf.multithread_mode = 1;
+    conf.user_data = nullptr;
 
-    tinyslip_handle_t handle = tinyslip_init( &conf );
+    tiny_slip_init( &handle, &conf );
     if ( !handle )
     {
         tiny_serial_close( serial );
@@ -180,7 +181,7 @@ int main(int argc, char *argv[])
     tx_thread.join();
     rx_thread.join();
 
-    tinyslip_close( handle );
+    tiny_slip_close( handle );
     free( conf.rx_buf );
 
     tiny_mutex_destroy( &queue_mutex );

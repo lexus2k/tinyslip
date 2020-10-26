@@ -31,7 +31,7 @@
 
 #include "hal/tiny_serial.h"
 #include "proto/slip/tiny_slip.h"
-#include "TinyProtocol.h"
+#include "TinyProtocolSlip.h"
 #include <stdio.h>
 //#include <time.h>
 #include <cstring>
@@ -89,16 +89,17 @@ static void protocol_thread(tiny_serial_handle_t serial)
     int rx_pos = 0;
 
     // Init slip protocol
-    tinyslip_init_t conf{};
-    conf.send_tx = nullptr;
+    tiny_slip_init_t conf{};
+    tiny_slip_handle_t handle = nullptr;
+
     conf.on_frame_read = on_frame_read;
     conf.on_frame_sent = on_frame_sent;
     conf.rx_buf = malloc( 1024 );
     conf.rx_buf_size = 1024;
-    conf.user_data = nullptr;
     conf.multithread_mode = 0;
+    conf.user_data = nullptr;
 
-    tinyslip_handle_t handle = tinyslip_init( &conf );
+    tiny_slip_init( &handle, &conf );
     if ( !handle )
     {
         fprintf(stderr, "Error initializing SLIP protocol\n");
@@ -116,14 +117,14 @@ static void protocol_thread(tiny_serial_handle_t serial)
             message = peek_message();
             if ( message )
             {
-                tinyslip_send( handle, message, strlen(message), 0 );
+                tiny_slip_send( handle, message, strlen(message), 0 );
                 peek_next = false;
             }
         }
         if ( !tx_len )
         {
             tx_pos = 0;
-            tx_len = tinyslip_get_tx_data(handle, tx, sizeof(tx));
+            tx_len = tiny_slip_get_tx_data(handle, tx, sizeof(tx));
         }
         if ( tx_len )
         {
@@ -145,12 +146,12 @@ static void protocol_thread(tiny_serial_handle_t serial)
             rx_len = result;
             rx_pos = 0;
         }
-        int result = tinyslip_run_rx(handle, rx + rx_pos, rx_len, nullptr);
+        int result = tiny_slip_on_rx_data(handle, rx + rx_pos, rx_len, nullptr);
         rx_pos += result;
         rx_len -= result;
     }
 
-    tinyslip_close( handle );
+    tiny_slip_close( handle );
 
     free( conf.rx_buf );
 }
@@ -170,7 +171,7 @@ int main(int argc, char *argv[])
     }
 
     tiny_mutex_create( &queue_mutex );
-    std::thread  tinyslip_thread( protocol_thread, serial );
+    std::thread  tiny_slip_thread( protocol_thread, serial );
     // Main program cycle
     for(;;)
     {
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
         send_message("Hello message");
     }
 
-    tinyslip_thread.join();
+    tiny_slip_thread.join();
     tiny_mutex_destroy( &queue_mutex );
     tiny_serial_close(serial);
     return 0;
