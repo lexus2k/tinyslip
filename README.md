@@ -25,6 +25,10 @@ I2C or any other communication channels.
 Tiny SLIP protocol is based on RFC 1055.
 This protocol doesn't implement any error detection.
 
+## Dependencies
+
+ * [tinyhal](https://github.com/lexus2k/tinyhal)
+
 ## Key Features
 
 Main features:
@@ -57,6 +61,19 @@ SLIP::Packet<256> packet;
 ## How to build
 
 ### Linux
+
+1. Getting source code
+
+If you wish to build the library with all dependencies you need to clone project using command
+```.txt
+git clone --recursive https://github.com/lexus2k/tinyslip
+```
+If you have all dependencies installed in the system, use the following command for cloning
+```.txt
+git clone https://github.com/lexus2k/tinyslip
+```
+
+2. Building
 ```.txt
 make
 # === OR ===
@@ -67,11 +84,34 @@ make
 ```
 
 ### Windows
+
+1. Getting source code
+
+If you wish to build the library with all dependencies you need to clone project using command
+```.txt
+git clone --recursive https://github.com/lexus2k/tinyslip
+```
+If you have all dependencies installed in the system, use the following command for cloning
+```.txt
+git clone https://github.com/lexus2k/tinyslip
+```
+
+2. Building
 ```.txt
 mkdir build
 cd build
 cmake -G "Visual Studio 16 2019" -DEXAMPLES=ON ..
 ```
+
+### ESP32
+
+1. Getting source code
+
+TODO
+
+2. Building
+
+Just build your project as regular ESP32 IDF project.
 
 ## Setting up
 

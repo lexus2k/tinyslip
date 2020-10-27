@@ -1,0 +1,3 @@
+[submodule "deps/tinyhal"]
+	path = deps/tinyhal
+	url = https://github.com/lexus2k/tinyhal
