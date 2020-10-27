@@ -1,5 +1,5 @@
 ![Tiny SLIP Protocol](.travis/tinylogo.svg)<br>
-[![Build Status](https://travis-ci.org/lexus2k/tinyslip.svg?branch=main)](https://travis-ci.org/lexus2k/tinyslip)
+[![Build Status](https://travis-ci.com/lexus2k/tinyslip.svg?branch=main)](https://travis-ci.com/lexus2k/tinyslip)
 [![Coverage Status](https://coveralls.io/repos/github/lexus2k/tinyslip/badge.svg?branch=master)](https://coveralls.io/github/lexus2k/tinyslip?branch=main)
 
 [tocstart]: # (toc start)
