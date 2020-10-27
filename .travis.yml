@@ -18,6 +18,7 @@ addons:
       - cpputest
       - graphviz
       - socat
+      - cmake
 before_install:
   - pip install --user cpp-coveralls
 install: skip
@@ -30,6 +31,7 @@ jobs:
         - ./.travis/setup_esp_build_env.sh travis
         - . ~/esp/esp-idf/export.sh
         - cd examples/esp32_idf/uart/tinyslip_loopback/components/tinyslip && ln -s ../../../../../../src && ln -s ../../../../../../component.mk
+        - cd ../tinyhal && ln -s ../../../../../../deps/tinyhal/src && ln -s ../../../../../../deps/tinyhal/component.mk
         - cd ../.. && make defconfig
         - make
       cache:
@@ -49,7 +51,9 @@ jobs:
         - make docs 1> /dev/null
         - ./.travis/run_tests.sh
         - make clean
-        - make EXTRA_CPPFLAGS="--coverage" check
+        - make EXTRA_CPPFLAGS="--coverage" UNITTEST=y check
+        - mkdir build
+        - cd build && cmake -DUNITTEST=ON -DEXAMPLES=ON .. && make check
       after_success:
         - coveralls -b . --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
     - stage: Check avr code

@@ -55,6 +55,7 @@ CXXFLAGS += -std=c++11
 ####################### Compiling library #########################
 PKG = libtinyslip
 $(PKG)_DEPENDENCIES = tinyhal
+$(PKG)_LIBRARIES = tinyhal
 $(PKG)_SOURCES = src/proto/slip/tiny_slip.c \
 	src/TinyProtocolSlip.cpp
 $(PKG)_CPPFLAGS += -I./src
