@@ -117,11 +117,11 @@ ifndef $(1)_INSTALL_CMDS
 define $(1)_INSTALL_CMDS
 	@mkdir -p $(DESTDIR)/usr/lib/
 	@cp -f $$($(1)_NAME) $(DESTDIR)/usr/lib/
-	@mkdir -p $(BLDDIR)/usr/lib/pkgconfig
+	@mkdir -p $(DESTDIR)/usr/lib/pkgconfig $(DESTDIR)/usr/include
 	@for i in $$($(1)_PKGCONFIG); do \
-	    cp -f $$$${i} $(BLDDIR)/usr/lib/pkgconfig/; \
+	    cp -f $$$${i} $(DESTDIR)/usr/lib/pkgconfig/; \
 	done
-	DST=`realpath $(DESTDIR)` && cd src && find ./ -name \*.h -exec cp --parents {} $${DST}/include/ \; && cd ..
+	DST=`realpath $(DESTDIR)` && cd src && find ./ -name \*.h -exec cp --parents {} $$$${DST}/usr/include/ \; && cd ..
 endef
 endif
 
