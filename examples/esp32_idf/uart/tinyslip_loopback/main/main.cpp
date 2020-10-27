@@ -72,7 +72,9 @@ void tx_task(void *arg)
 {
     for (;;)
     {
-        proto.run_tx( 100 );
+        uint8_t tx_buf[4];
+        int len = proto.run_tx( tx_buf, sizeof tx_buf );
+        uart_write_bytes(UART_NUM_1, (const char *)buffer, len);
     }
     vTaskDelete( NULL );
 }
@@ -97,13 +99,7 @@ void main_task(void *args)
     /* Lets process all incoming frames */
     proto.setReceiveCallback( onReceive );
     /* Redirect all protocol communication to Serial0 UART */
-#if defined(TINY_MULTITHREAD)
-    proto.begin([](void *p, const void *b, int s)->int { return uart_write_bytes(UART_NUM_1, (const char *)b, s); },
-                [](void *p, void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 10); });
-#else
-    proto.begin([](void *p, const void *b, int s)->int { return uart_tx_chars(UART_NUM_1, (const char *)b, s); },
-                [](void *p, void *b, int s)->int { return uart_read_bytes(UART_NUM_1, (uint8_t *)b, s, 0); });
-#endif
+    proto.begin();
 
 #if defined(TINY_MULTITHREAD)
     xTaskCreate( tx_task, "tx_task", 2096, NULL, 1, NULL );
@@ -111,10 +107,21 @@ void main_task(void *args)
     for(;;)
     {
 #if defined(TINY_MULTITHREAD)
-        proto.run_rx(100);
+        uint8_t rx_buf[4];
+        int rx_len = uart_read_bytes(UART_NUM_1, (uint8_t *)rx_buf, sizeof rx_buf, 10);
+        proto.run_rx( rx_buf, rx_len );
 #else
-        proto.run_rx();
-        proto.run_tx();
+        uint8_t rx_buf[4];
+        int rx_len = uart_read_bytes(UART_NUM_1, (uint8_t *)rx_buf, sizeof rx_buf, 0);
+        proto.run_rx( rx_buf, rx_len );
+
+        uint8_t tx_buf[4];
+        int tx_len = proto.run_tx( tx_buf, sizeof tx_buf );
+        int sent = 0;
+        while ( sent < tx_len )
+        {
+            sent += uart_tx_chars(UART_NUM_1, (const char *)tx_buf + sent, tx_len - sent);
+        }
 #endif
     }
     vTaskDelete( NULL );
