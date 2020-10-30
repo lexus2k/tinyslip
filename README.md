@@ -113,6 +113,32 @@ TODO
 
 Just build your project as regular ESP32 IDF project.
 
+### Cross-compilation
+
+1. Getting source code
+
+If you wish to build the library with all dependencies you need to clone project using command
+```.txt
+git clone --recursive https://github.com/lexus2k/tinyslip
+```
+If you have all dependencies installed in the system, use the following command for cloning
+```.txt
+git clone https://github.com/lexus2k/tinyslip
+```
+
+2. Building
+```.txt
+make CROSS_COMPILE=<prefix> STAGING_DIR=<your_staging_dir>
+```
+
+# === OR ===
+mkdir build
+cd build
+cmake -DEXAMPLES=ON ..
+make
+```
+
+
 ## Setting up
 
  * Arduino Option 1 (with docs and tools)
@@ -139,7 +165,7 @@ Just build your project as regular ESP32 IDF project.
  * Plain AVR
    * Download sources from https://github.com/lexus2k/tinyslip
    * Install avr gcc compilers
-   * Run `make ARCH=avr`
+   * Run `make PLATFORM=avr`
 
 ## Using tiny_loopback tool
 

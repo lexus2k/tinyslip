@@ -1,21 +1,21 @@
 default: libtinyslip
-ARCH ?= linux
 DESTDIR ?= .
+UNITTEST ?= n
 
 include bs/toolchain.mk
-include bs/package_make.mk
 include bs/project.mk
+include bs/package_make.mk
 
 ######################## Custom options #########################
 
-ifeq ($(ARCH),linux)
+ifeq ($(PLATFORM),linux)
 CONFIG_ENABLE_FCS32 ?= y
 CONFIG_ENABLE_FCS16 ?= y
 CONFIG_ENABLE_CHECKSUM ?= y
 CONFIG_ENABLE_STATS ?=y
 endif
 
-ifeq ($(ARCH),avr)
+ifeq ($(PLATFORM),avr)
 CONFIG_ENABLE_FCS32 ?= n
 CONFIG_ENABLE_FCS16 ?= n
 CONFIG_ENABLE_CHECKSUM ?= y
@@ -49,7 +49,7 @@ $(eval $(package-make))
 ##################################################################
 
 CFLAGS += -std=gnu99
-CPPFLAGS += -Os -Wall -Werror -ffunction-sections -fdata-sections
+CPPFLAGS += -Os -Wall -Werror -ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
 CXXFLAGS += -std=c++11
 
 ####################### Compiling library #########################
@@ -62,7 +62,7 @@ $(PKG)_CPPFLAGS += -I./src
 $(eval $(project-static-lib))
 
 ####################### Compiling tools #########################
-ifeq ($(ARCH),linux)
+ifeq ($(PLATFORM),linux)
 PKG = tinyslip_loopback
 $(PKG)_SOURCES = examples/linux/loopback/tinyslip_loopback.cpp
 $(PKG)_DEPENDENCIES = libtinyslip tinyhal
@@ -73,7 +73,7 @@ $(eval $(project-binary))
 endif
 
 ####################### Compiling unit tests ####################
-ifeq ($(ARCH),linux)
+ifeq ($(PLATFORM),linux)
 PKG = unittest
 $(PKG)_NAME = unit_test
 $(PKG)_SOURCES = \
@@ -95,5 +95,11 @@ $(eval $(project-binary))
 unit_test: .ts_unittest_build
 check:
 	./unit_test
+
+ifeq ($(UNITTEST),y)
+check: unittest
+all: unittest
+endif
+
 endif
 

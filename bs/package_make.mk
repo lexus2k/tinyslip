@@ -26,10 +26,10 @@ $($(1)_SRCDIR)/.ts_build: $($(1)_SRCDIR)/.ts_deps
 	@touch $$@
 
 $($(1)_SRCDIR)/.ts_install: $($(1)_SRCDIR)/.ts_build
-	$(MAKE) -C $($(1)_SRCDIR) DESTDIR=$(BLDDIR) $$($(1)_INSTALL_OPTS)
-	@mkdir -p $(BLDDIR)/usr/lib/pkgconfig
+	$(MAKE) -C $($(1)_SRCDIR) DESTDIR=$(STAGING_DIR) $$($(1)_INSTALL_OPTS)
+	@mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	@for i in $$($(1)_PKGCONFIG); do \
-	    cp -f $$$${i} $(BLDDIR)/usr/lib/pkgconfig/; \
+	    cp -f $$$${i} $(STAGING_DIR)/usr/lib/pkgconfig/; \
 	done
 	@touch $$@
 

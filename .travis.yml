@@ -47,7 +47,7 @@ jobs:
     - stage: Check gcc linux code
       compiler: gcc
       script:
-        - make
+        - make all
         - make docs 1> /dev/null
         - ./.travis/run_tests.sh
         - make clean
@@ -58,5 +58,5 @@ jobs:
         - coveralls -b . --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
     - stage: Check avr code
       script:
-        - make ARCH=avr
+        - make PLATFORM=avr
 
