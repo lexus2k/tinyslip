@@ -1,10 +1,9 @@
 PLATFORM ?= linux
 STAGING_DIR ?= $(shell pwd)/bld
 PKG_CONFIG ?= pkg-config
+CROSS_COMPILE ?=
 
 include bs/platform-$(PLATFORM).mk
-
-CROSS_COMPILE ?=
 
 ifneq ($(CROSS_COMPILE),)
 CXX ?= $(CROSS_COMPILE)g++
