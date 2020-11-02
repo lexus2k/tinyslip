@@ -1,14 +1,15 @@
 PLATFORM ?= linux
 STAGING_DIR ?= $(shell pwd)/bld
 PKG_CONFIG ?= pkg-config
-CROSS_COMPILE ?=
 
 include bs/platform-$(PLATFORM).mk
 
+CROSS_COMPILE ?=
+
 ifneq ($(CROSS_COMPILE),)
-CXX ?= $(CROSS_COMPILE)g++
-CC ?= $(CROSS_COMPILE)gcc
-AR ?= $(CROSS_COMPILE)ar
+CXX= $(CROSS_COMPILE)g++
+CC= $(CROSS_COMPILE)gcc
+AR= $(CROSS_COMPILE)ar
 HOST_SYSROOT ?= n
 else
 HOST_SYSROOT ?= y
@@ -27,6 +28,9 @@ PKG_CONFIG_CROSS_ENV += \
 endif
 
 CROSS_ENV = \
+        CXX=$(CXX) \
+        CC=$(CC) \
+        AR=$(AR) \
 	$(PKG_CONFIG_CROSS_ENV) \
 	CFLAGS="$(CFLAGS)" \
 	CXXFLAGS="$(CXXFLAGS)" \
