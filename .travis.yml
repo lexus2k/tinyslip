@@ -41,6 +41,9 @@ jobs:
     - stage: Check clang linux code
       compiler: clang
       script:
+        - mkdir build
+        - cd build && cmake -DUNITTEST=ON -DEXAMPLES=ON .. && make check
+        - cd .. && rm -rf build
         - make
         - make install DESTDIR=test_path
         - ./.travis/check_install.sh . test_path
@@ -52,8 +55,6 @@ jobs:
         - ./.travis/run_tests.sh
         - make clean
         - make EXTRA_CPPFLAGS="--coverage" UNITTEST=y check
-        - mkdir build
-        - cd build && cmake -DUNITTEST=ON -DEXAMPLES=ON .. && make check
       after_success:
         - coveralls -b . --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
     - stage: Check avr code
