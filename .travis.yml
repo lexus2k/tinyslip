@@ -1,0 +1,36 @@
+# Configuration
+
+os:
+  - linux
+#  - windows
+language: cpp
+# compiler:
+#  - gcc
+#  - clang
+
+addons:
+  apt:
+    packages:
+      - gcc-avr
+      - avr-libc
+      - doxygen
+      - cmake
+before_install:
+  - pip install --user cpp-coveralls
+install: skip
+jobs:
+  allow_failures:
+    - os: windows
+  include:
+    - stage: Check clang linux code
+      compiler: clang
+      script:
+        - ./unittest/run_tests.sh
+    - stage: Check gcc linux code
+      compiler: gcc
+      script:
+        - ./unittest/run_tests.sh
+#    - stage: Check avr code
+#      script:
+#        - make PLATFORM=avr
+
