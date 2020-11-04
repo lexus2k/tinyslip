@@ -11,10 +11,10 @@ if (NOT DEFINED COMPONENT_DIR)
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/bs)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/buildsys)
 
     include(ExternalProject)
-    include(package-linker)
+    include(buildsys/package-linker.cmake)
 
     project(tinyslip)
 

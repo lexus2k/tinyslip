@@ -2,9 +2,9 @@ default: libtinyslip
 DESTDIR ?= .
 UNITTEST ?= n
 
-include bs/toolchain.mk
-include bs/project.mk
-include bs/package_make.mk
+include buildsys/toolchain.mk
+include buildsys/project.mk
+include buildsys/package_make.mk
 
 ######################## Custom options #########################
 

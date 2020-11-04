@@ -28,7 +28,8 @@ This protocol doesn't implement any error detection.
 
 ## Dependencies
 
- * [tinyhal](https://github.com/lexus2k/tinyhal)
+ * [buildsys] (https://github.com/lexus2k/buildsys) integrated to this library
+ * [tinyhal](https://github.com/lexus2k/tinyhal) as submodule
 
 ## Key Features
 
