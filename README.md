@@ -24,11 +24,12 @@ It is also can be compiled for desktop Linux system, and it can be built it for 
 Using this library you can easy implement data transfer between 2 microcontrollers or between microcontroller and pc via UART, SPI,
 I2C or any other communication channels.
 Tiny SLIP protocol is based on RFC 1055.
-This protocol doesn't implement any error detection.
+This protocol doesn't implement any error detection! If you need error detection and frames acknowledgment,
+please refer to [TinyProto](https://github.com/lexus2k/tinyproto) library.
 
 ## Dependencies
 
- * [buildsys] (https://github.com/lexus2k/buildsys) integrated to this library
+ * [buildsys](https://github.com/lexus2k/buildsys) integrated to this library
  * [tinyhal](https://github.com/lexus2k/tinyhal) as submodule
 
 ## Key Features
