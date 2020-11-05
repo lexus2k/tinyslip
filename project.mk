@@ -123,7 +123,9 @@ $(1)_clean:
 $(1): .ts_$(1)_build
 	@echo "=== $(1): OK ==="
 
+ifeq ($$($(1)_INSTALL_TARGET),YES)
 install: .ts_$(1)_install
+endif
 
 clean: $(1)_clean
 

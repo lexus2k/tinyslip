@@ -49,7 +49,14 @@ macro(link_external_package _NAME _PATH)
 endmacro()
 
 
-macro(register_static_library _NAME _SRC _HDR _INC_DIR)
+macro(register_static_library)
+
+#    set(options OPTIONAL FAST)
+    set(options)
+    set(oneValueArgs NAME INCLUDE_DIR)
+    set(multiValueArgs SOURCES HEADERS PKGCONFIG CMAKE_MODULE LINK_EXTERNAL)
+    cmake_parse_arguments(PKG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
     if (NOT DEFINED COMPONENT_DIR)
         set(CMAKE_CXX_STANDARD 11)
         set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -58,28 +65,38 @@ macro(register_static_library _NAME _SRC _HDR _INC_DIR)
 
         include(ExternalProject)
 
-        project(${_NAME})
+        project(${PKG_NAME})
 
-        include_directories(${${_INC_DIR}})
+        include_directories(${PKG_INCLUDE_DIR})
 
-        add_library(${_NAME} STATIC ${${_SRC}} ${${_HDR}})
+        add_library(${PKG_NAME} STATIC ${PKG_SOURCES} ${PKG_HEADERS})
 
-        install(TARGETS ${_NAME}
+        foreach(LLIB ${PKG_LINK_EXTERNAL})
+            link_external_package(${LLIB} ${CMAKE_CURRENT_LIST_DIR}/deps/${LLIB})
+        endforeach()
+
+        install(TARGETS ${PKG_NAME}
             ARCHIVE DESTINATION usr/lib
         )
 
-        foreach(HFILE ${${_HDR}})
-            string(LENGTH ${${_INC_DIR}} SLEN)
-            get_filename_component(DIR ${HFILE} DIRECTORY ${${_INC_DIR}} ${${_INC_DIR}}/)
+        foreach(HFILE ${PKG_HEADERS})
+            string(LENGTH ${PKG_INCLUDE_DIR} SLEN)
+            get_filename_component(DIR ${HFILE} DIRECTORY ${PKG_INCLUDE_DIR} ${PKG_INCLUDE_DIR})
             string(SUBSTRING ${DIR} ${SLEN} -1 DIR)
             install(FILES ${HFILE} DESTINATION usr/include/${DIR})
         endforeach()
-        install(FILES ${_NAME}.pc DESTINATION usr/lib/pkgconfig/)
-        install(FILES Find${_NAME}.cmake DESTINATION usr/share/cmake/)
+
+        foreach(PCFILE ${PKG_PKGCONFIG})
+            install(FILES ${PCFILE} DESTINATION usr/lib/pkgconfig/)
+        endforeach()
+
+        foreach(MODULEFILE ${PKG_CMAKE_MODULE})
+            install(FILES ${MODULEFILE} DESTINATION usr/share/cmake/)
+        endforeach()
 
     else()
-        idf_component_register(SRCS ${${_SRC}}
-                               INCLUDE_DIRS ${${_INC_DIR}})
+        idf_component_register(SRCS ${PKG_SOURCES}}
+                               INCLUDE_DIRS ${PKG_HEADERS})
 
     endif()
 endmacro()
