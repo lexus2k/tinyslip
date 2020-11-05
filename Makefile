@@ -1,5 +1,4 @@
 default: libtinyslip
-DESTDIR ?= .
 UNITTEST ?= n
 
 include buildsys/toolchain.mk
