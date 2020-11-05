@@ -20,6 +20,7 @@
 PLATFORM ?= linux
 STAGING_DIR ?= $(shell pwd)/bld
 PKG_CONFIG ?= pkg-config
+DESTDIR ?=
 
 include buildsys/platform-$(PLATFORM).mk
 

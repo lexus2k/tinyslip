@@ -37,11 +37,16 @@ Static library from single file (CMake)
 cmake_minimum_required (VERSION 3.5)
 include(buildsys/package-linker.cmake)
 
-set(SOURCE_FILES src/mylib.c)
-set(HEADER_FILES "")
-set(INCLUDE_DIRS src)
+register_static_library(NAME simple
+    SOURCES
+        src/source.c
+    HEADERS
+        src/header.h
+    INCLUDE_DIR src
+    PKGCONFIG simple.pc
+    CMAKE_MODULE Findsimple.cmake
+)
 
-register_static_library(mylib SOURCE_FILES HEADER_FILES INCLUDE_DIRS)
 ```
 
 ## License
