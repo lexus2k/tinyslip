@@ -56,7 +56,7 @@ jobs:
         - make clean
         - make EXTRA_CPPFLAGS="--coverage" UNITTEST=y check
       after_success:
-        - coveralls -b . --exclude docs --exclude extra --exclude unittest --exclude bld --exclude tools --exclude examples --gcov-options '\-lp'
+        - coveralls -b . --exclude docs --exclude unittest --exclude bld --exclude tools --exclude examples --exclude buildsys --exclude deps --gcov-options '\-lp'
     - stage: Check avr code
       script:
         - make PLATFORM=avr
