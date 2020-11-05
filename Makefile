@@ -43,7 +43,7 @@ endif
 
 PKG = tinyhal
 $(PKG)_SRCDIR = ./deps/tinyhal
-$(PKG)_MAKE_OPTS = ARCH=$(PLATFORM)
+$(PKG)_MAKE_OPTS = PLATFORM=$(PLATFORM)
 $(eval $(package-make))
 
 ##################################################################
