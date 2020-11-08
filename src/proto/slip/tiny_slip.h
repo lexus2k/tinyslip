@@ -33,7 +33,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "hal/tiny_types.h"
+#include "tiny_hal.h"
 
 /**
  * @defgroup SLIP_API Tiny SLIP API functions

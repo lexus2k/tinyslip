@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "hal/tiny_types.h"
+#include "tiny_hal.h"
 
 /** Byte to fill gap between frames */
 #define TINY_SLIP_FILL_BYTE            0xC0
