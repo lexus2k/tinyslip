@@ -63,7 +63,7 @@ TEST(SLIP, single_receive)
     const uint8_t frame[] = { 0xC0, 0x01, 0xDB, 0xDC, 0xDB, 0xDD, 0xC0 };
     conn.endpoint1().write( frame, sizeof(frame) );
     helper2.run( true );
-    helper2.wait_until_rx_count(1, 10);
+    helper2.wait_until_rx_count(1, 50);
     CHECK_EQUAL( 1, helper2.rx_count() );
     if ( static_cast<uint32_t>(tiny_millis() - start_ts) > 50 )
     {
@@ -83,7 +83,7 @@ TEST(SLIP, single_send)
     const uint8_t valid_data[] = { 0xC0, 0x01, 0xDB, 0xDC, 0xDB, 0xDD, 0xC0 };
 
     helper2.send( frame, sizeof(frame), 100 );
-    if ( !conn.endpoint1().wait_until_rx_count( sizeof(valid_data), 10 ) )
+    if ( !conn.endpoint1().wait_until_rx_count( sizeof(valid_data), 50 ) )
     {
         FAIL("Timeout");
     }
@@ -110,4 +110,13 @@ TEST(SLIP, zero_len_send)
     uint8_t data[] = { 0x00 };
     int result = helper2.send( data, 0 );
     CHECK_EQUAL( TINY_ERR_INVALID_DATA, result );
+}
+
+TEST(SLIP, buffer_size)
+{
+    int size = tiny_slip_calc_buffer_size( 1024 );
+    if ( size < 1024 )
+    {
+        FAIL("Wrong size")
+    }
 }
