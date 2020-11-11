@@ -132,8 +132,6 @@ git clone https://github.com/lexus2k/tinyslip
 2. Building
 ```.txt
 make CROSS_COMPILE=<prefix> STAGING_DIR=<your_staging_dir>
-```
-
 # === OR ===
 mkdir build
 cd build
