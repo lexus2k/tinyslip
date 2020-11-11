@@ -56,6 +56,8 @@ CXXFLAGS += -std=c++11
 PKG = libtinyslip
 $(PKG)_DEPENDENCIES = tinyhal
 $(PKG)_LIBRARIES = tinyhal
+$(PKG)_PKGCONFIG = tinyslip.pc
+$(PKG)_CMAKE_MODULE = Findtinyslip.cmake
 $(PKG)_SOURCES = src/proto/slip/tiny_slip.c \
 	src/TinyProtocolSlip.cpp
 $(PKG)_CPPFLAGS += -I./src

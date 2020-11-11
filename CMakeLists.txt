@@ -1,42 +1,30 @@
 cmake_minimum_required (VERSION 3.5)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/buildsys)
+include(package-linker)
+
 option(EXAMPLES "Build examples and tinyslip_loopback" OFF)
 option(UNITTEST "Build unit tests" OFF)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp src/*.c)
 file(GLOB_RECURSE HEADER_FILES src/*.h)
+file(GLOB BASEDIR src)
 
-if (NOT DEFINED COMPONENT_DIR)
+register_static_library(NAME tinyslip
+    SOURCES ${SOURCE_FILES}
+    HEADERS ${HEADER_FILES}
+    INCLUDE_DIR ${BASEDIR}
+    PKGCONFIG tinyslip.pc
+    CMAKE_MODULE Findtinyslip.cmake
+    LINK_EXTERNAL tinyhal
+)
 
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if (EXAMPLES)
+    add_subdirectory(examples/linux/loopback)
+    add_subdirectory(examples/linux/slip_demo)
+    add_subdirectory(examples/linux/slip_demo_multithread)
+endif()
 
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/buildsys)
-
-    include(ExternalProject)
-    include(buildsys/package-linker.cmake)
-
-    project(tinyslip)
-
-    include_directories(src)
-
-    add_library(tinyslip STATIC ${HEADER_FILES} ${SOURCE_FILES})
-
-    link_external_package(tinyhal ${CMAKE_CURRENT_LIST_DIR}/deps/tinyhal)
-
-    if (EXAMPLES)
-        add_subdirectory(examples/linux/loopback)
-        add_subdirectory(examples/linux/slip_demo)
-        add_subdirectory(examples/linux/slip_demo_multithread)
-    endif()
-
-    if (UNITTEST)
-        add_subdirectory(unittest)
-    endif()
-
-else()
-
-    idf_component_register(SRCS ${SOURCE_FILES}
-                           INCLUDE_DIRS "src")
-
+if (UNITTEST)
+    add_subdirectory(unittest)
 endif()
