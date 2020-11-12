@@ -37,7 +37,7 @@ please refer to [TinyProto](https://github.com/lexus2k/tinyproto) library.
 Main features:
  * Frames of maximum 32K or 2G size (limit depends on platform).
  * Low SRAM consumption (starts at 50 bytes).
- * Low Flash consumption (starts at less than 1KiB)
+ * Low Flash consumption (starts at 1KiB)
  * No dynamic memory allocation
  * Serial loopback tool for debug purposes and performance testing
 
