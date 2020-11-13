@@ -50,14 +50,29 @@ Main features:
 Tiny SLIP Library is very easy to use:
 ```.cpp
 SLIP::SLIP  proto;
-SLIP::Packet<256> packet;
+
+void onReceive(SLIP::IPacket &pkt)
+{
+    // Process incoming packets here
+
+    /* Send message back */
+    proto.write( pkt );
+}
+
+...
+...
+    proto.setReceiveCallback( onReceive );
+    proto.begin();
+...
 ...
     if (Serial.available()) {
-        int len = proto.read( packet );
-        if (len > 0) {
-            /* Send message back */
-            proto.write( packet );
-        }
+        uint8_t byte = Serial.read();
+        proto.run_rx(&byte, 1);
+    }
+    uint8_t byte;
+    if ( proto.run_tx(&byte, 1) == 1)
+    {
+        Serial.write( byte );
     }
 ```
 
